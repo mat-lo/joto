@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="flatten-tests">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+
+  <title>SVG server-side flatenner test suite</title>
+
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+
+	<link rel="stylesheet" type="text/css" href="../bower_components/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="../bower_components/codemirror/theme/twilight.css">
+
+	<script type="text/javascript" src="../bower_components/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="../bower_components/codemirror/addon/display/autorefresh.js"></script>
+	<script type="text/javascript" src="../bower_components/codemirror/mode/xml/xml.js"></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="page-header">
+      <h1>SVG Flatenner Test Suite</h1>
+    </div>
+
+    {{#tests}}
+
+    <h3>{{filename}}</h3>
+
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="#rendered_{{index}}" data-toggle="tab">Rendered</a></li>
+      <li role="presentation"><a href="#source_{{index}}" data-toggle="tab">Source</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="rendered_{{index}}">
+        <div class="row">
+          <div class="col-md-6">
+            <h5><span class="label label-default">Original</span></h5>
+            <div class="embed-responsive embed-responsive-16by9">
+              <div class="embed-responsive-item">
+                {{{src}}}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5><span class="label label-default">Flattened</span></h5>
+            <div class="embed-responsive embed-responsive-16by9">
+              <div class="embed-responsive-item">
+                {{{dest}}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="source_{{index}}">
+        <div class="row">
+          <div class="col-md-6">
+            <h5><span class="label label-default">Original</span></h5>
+            <div class="embed-responsive embed-responsive-16by9">
+              <textarea class="embed-responsive-item" ui-codemirror="{autoRefresh: true, lineNumbers: true, theme:'twilight', readOnly: true, lineWrapping : true, mode: 'xml' }">{{{src}}}</textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5><span class="label label-default">Flattened</span></h5>
+            <div class="embed-responsive embed-responsive-16by9">
+              <textarea class="embed-responsive-item" ui-codemirror="{autoRefresh: true, lineNumbers: true, theme:'twilight', readOnly: true, lineWrapping : true, mode: 'xml' }">{{{dest}}}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{/tests}}
+
+  </div>
+
+  <!-- Le javascript -->
+  <script type="application/javascript" src="../bower_components/angular/angular.min.js"></script>
+  <script type="application/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="application/javascript" src="../bower_components/bootstrap/js/tab.js"></script>
+  <script type="application/javascript" src="../bower_components/angular-ui-codemirror/ui-codemirror.min.js"></script>
+  <script>
+    angular.module('flatten-tests', ['ui.codemirror'])
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="icon" href="favicon.png">
+	<title>type</title>
+	<style>
+
+		body {
+			background: #F5F5F5;
+		}
+
+		.container {
+			width: 720px;			
+			margin: 40px auto 0 auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		textarea {
+			color: #444;
+			font-size: 42px;
+			background:none;
+			width: 720px;
+			height:450px;
+			resize: none;
+			outline: none;
+			border: 5px solid #CCC;
+			border-radius: 10px;
+			padding: 10px;
+		}
+
+		#generate {
+			margin-top: 20px;
+			color: #444;
+			background: none;
+			border: 3px solid #F5A623;
+			font-size: 21px;
+			padding: 8px 18px;
+			border-radius: 5px;
+			outline: none;
+		}
+
+		#generate:active {
+			background: #CCC;			
+		}
+
+		#logo {
+			width:150px;
+			margin-bottom: 35px;
+		}
+		
+	</style>
+</head>
+<body>	
+	<div class="container">
+		<img id="logo" src="logo.png" alt="">		
+		<textarea placeholder="type here..." id="texto" ></textarea>
+		<button id="generate">draw!</button>
+	</div>
+	
+	<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>  
+	<script src="gcode.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+	<script src="letters.js"></script>
+	<script>		
+
+		// initial text offset and line height
+		let ox = 0
+		let oy = 60
+		let lineHeight = 85
+		let charactersPerLine = 25
+
+		// letter offset
+		var xoff = 0;
+		var yoff = 0;
+
+
+		//kerning 
+		let KERNING = 40		
+
+		// Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyA_OrPF1jiqO209XFhJlRk5I_-qnrtbJes",
+		    authDomain: "joto-bot.firebaseapp.com",
+		    databaseURL: "https://joto-bot.firebaseio.com",
+		    projectId: "joto-bot",
+		    storageBucket: "",
+		    messagingSenderId: "367727979494"
+		  };
+		  firebase.initializeApp(config);
+		  var database = firebase.database();		
+
+		  //firebase auth
+		  firebase.auth().signInAnonymously().catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  // ...
+		});
+
+		  firebase.auth().onAuthStateChanged(function(user) {
+		  if (user) {
+		    // User is signed in.
+		    var isAnonymous = user.isAnonymous;
+		    var uid = user.uid;
+		    // ...
+		  } else {
+		    // User is signed out.
+		    // ...
+		  }
+		  // ...
+		});
+
+		var input = document.querySelector('textarea');
+		var generate = document.getElementById('generate')
+
+		generate.onclick = function() {
+			//get lowercase input
+			var s = input.value.toLowerCase()				
+
+			var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");			
+			for (var i = 0; i < s.length; i++) {
+				var x = ox + xoff
+				var y = oy + yoff
+				letterToSVG(i, s[i], svg, x, y)	
+			}
+			xoff = 0
+			yoff = 0
+			
+			// document.body.appendChild(svg)
+			
+			svg2gcode(svg.outerHTML, function(data){
+						console.log(data)
+						firebase.database().ref().set({
+					    gcode: data
+					  });
+					})
+		}		
+		
+		function letterToSVG(i, letter, svg, x, y) {
+
+			//kerning
+			var k = KERNING
+			if (letter == 'c') k = 38
+			if (letter == 'f') k = 38
+			if (letter == 'h') k = 38
+			if (letter == 'i') k = 38
+			if (letter == 'j') k = 28
+			if (letter == 'l') k = 38
+			if (letter == 'm') k = 49
+			if (letter == 'o') k = 44
+			if (letter == 'r') k = 48
+			if (letter == 'u') k = 38
+			if (letter == 'v') k = 38
+			if (letter == 'w') k = 52
+			if (letter == '0') k = 45
+			if (letter == '1') k = 45
+			if (letter == '2') k = 45
+			if (letter == '3') k = 43
+			if (letter == '4') k = 45
+			if (letter == '5') k = 45
+			if (letter == '6') k = 43
+			if (letter == '7') k = 43
+			if (letter == '8') k = 45
+			if (letter == '9') k = 45
+			if (letter == ':') k = 18
+			if (letter == '.') k = 18
+
+			var d = getLetterSVG(letter)								
+			var g = document.createElement('g')
+			g.innerHTML = d			
+			g.setAttribute("transform", "translate(" + x + "," + y + ")")				
+			svg.appendChild(g)	
+			xoff += k
+			if (i > 0) {
+				if (i % charactersPerLine == 0) {
+					yoff += lineHeight
+					xoff = 0
+				}
+			}
+		}
+
+		// upload svg 
+		function parseSVG() {
+			var curFiles = input.files;
+			for(var i = 0; i < curFiles.length; i++) {		      		      
+		      
+		      var image = document.createElement('img');
+		      image.id = "yoyo"
+		      image.src = window.URL.createObjectURL(curFiles[i]);
+		      document.body.appendChild(image);
+
+		      //convert image into inline svg
+		      var $img = $('#yoyo'),
+		          imgURL = $img.attr('src'),
+		          imgID  = $img.attr('id');
+		    
+		      $.get(imgURL, function(data) {
+		          // Get the SVG tag, ignore the rest
+		          var $svg = $(data).find('svg');
+		          // Add replaced image's ID to the new SVG
+		          if(typeof imgID !== 'undefined') {
+		              $svg = $svg.attr('id', imgID);
+		          }
+		        
+		          $svg = $svg.removeAttr('xmlns:a');
+		          $img.replaceWith($svg);
+
+		          svg2gcode($svg[0].outerHTML, function(data){
+						console.log(data)
+						firebase.database().ref().set({
+					    gcode: data
+					  });
+					})
+
+		      }, 'xml');		      
+
+		    }
+		}
+		
+	</script>
+</body>
+</html>

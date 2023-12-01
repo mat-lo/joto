@@ -1,0 +1,22 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/ribaptista/flattenjs",
+  "authors": [
+    "ribaptista <ricardogermano85@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "codemirror": "^5.15.2",
+    "bootstrap": "^3.3.6",
+    "angular-ui-codemirror": "^0.3.0"
+  }
+}

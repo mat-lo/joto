@@ -1,0 +1,47 @@
+{
+    "_id": {
+        "$oid": "5a295ed5ac26540011bedd9a"
+    },
+    "secret": "lBBEbAqL6rryw5aZrp42",
+    "token": "Vl6aG4jLb1XbFgeWlo9L",
+    "lastName": "Rhodes",
+    "firstName": "James",
+    "email": "jim@madebythose.com",
+    "password": "$2a$10$o0UJxq1In3yip0bJMRMo4uEniNniEmPQRH/.9/dwmCVaQogP7W5vS",
+    "username": "googlelabs",
+    "playlists": [],
+    "files": [],
+    "sockets": [
+        {
+            "name": "woodpecker",
+            "value": "nroGKEEsehBtsIMiAAAa"
+        },
+        {
+            "name": "browser",
+            "value": "EWIYfXk7I0-h39CnAAAc"
+        }
+    ],
+    "__v": 0,
+    "config": {
+        "gcode": {
+            "speed": "G1 F12000",
+            "stop": "G1 X10 Y10, G28 Y0, G28 X0, M84, M106 S0",
+            "start": "G21, G90, G28 Y0, G28 X0",
+            "wipe": "M106 S10",
+            "pendown": "M106 S200,G4 P140,M106 S0",
+            "penup": "M106 S120,G4 P140,M106 S0",
+            "pause": "",
+            "servo": "",
+            "touch": ""
+        },
+        "wiper_offset": "65",
+        "wiper": "true",
+        "flip": false,
+        "offsety": "0",
+        "offsetx": "0",
+        "width": "1250",
+        "height": "900",
+        "baud": "115200",
+        "port": ""
+    }
+}

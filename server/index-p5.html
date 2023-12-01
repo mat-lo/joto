@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<style>
+		svg {
+			border: 2px solid black;
+		}
+	</style>
+</head>
+<body>	
+	<div id="container"></div>
+	<input name="myFile" type="file">
+	<button id="convert">convert</button>
+	
+	<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="p5.js"></script>
+	<script src="p5.svg.js"></script>   
+	<script src="gcode.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+	<script>
+
+		// Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyA_OrPF1jiqO209XFhJlRk5I_-qnrtbJes",
+		    authDomain: "joto-bot.firebaseapp.com",
+		    databaseURL: "https://joto-bot.firebaseio.com",
+		    projectId: "joto-bot",
+		    storageBucket: "",
+		    messagingSenderId: "367727979494"
+		  };
+		  firebase.initializeApp(config);
+
+		// P5
+		function setup() {
+		  createCanvas(800, 576, SVG);		 
+		  // canvas.parent('container');
+		  background(255)			
+		  strokeWeight(3)
+		}
+
+		// function draw() {	
+		// ellipse(130,130,100,100)		
+			// if (mouseIsPressed) {
+		        
+		 //    }
+		// }	
+
+		// function draw() {
+    // var r = frameCount % 200 * Math.sqrt(2);
+    // background(255);
+    // ellipse(0, 0, r, r);
+		// }
+
+		function mouseDragged() {
+			stroke(0)
+		        noFill()
+		        line(mouseX, mouseY, pmouseX, pmouseY)
+		}
+
+		function keyPressed() {
+		    if (key == ' ') {
+		        $("path").remove()
+		    }
+		}
+
+		// END OF P5	
+
+
+		var convert = document.getElementById('convert')
+		convert.onclick = function() {
+			$("rect").remove()
+
+			// var svg = document.querySelector('svg')
+			
+			var pathCoords = ""
+			$("path").each(function() {
+				var coords = $(this).attr("d")
+				pathCoords += coords
+			})
+			
+			var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+			var path = document.createElement("path")
+			path.setAttribute("d", pathCoords)
+			svg.appendChild(path)
+			console.log(svg)
+			// console.log(pathCoords)
+
+			svg2gcode(svg.outerHTML, function(data){
+						console.log(data)
+					})
+		}
+
+		var input = document.querySelector('input');
+		input.addEventListener('change', parseSVG);
+
+		// upload svg 
+		function parseSVG() {
+			var curFiles = input.files;
+			for(var i = 0; i < curFiles.length; i++) {		      		      
+		      
+		      var image = document.createElement('img');
+		      image.id = "yoyo"
+		      image.src = window.URL.createObjectURL(curFiles[i]);
+		      document.body.appendChild(image);
+
+		      //convert image into inline svg
+		      var $img = $('#yoyo'),
+		          imgURL = $img.attr('src'),
+		          imgID  = $img.attr('id');
+		    
+		      $.get(imgURL, function(data) {
+		          // Get the SVG tag, ignore the rest
+		          var $svg = $(data).find('svg');
+		          // Add replaced image's ID to the new SVG
+		          if(typeof imgID !== 'undefined') {
+		              $svg = $svg.attr('id', imgID);
+		          }
+		        
+		          $svg = $svg.removeAttr('xmlns:a');
+		          $img.replaceWith($svg);
+
+		          // console.log($svg[0].outerHTML)
+		          svg2gcode($svg[0].outerHTML, function(data){
+						console.log(data)
+					})
+
+		      }, 'xml');
+		    
+		    //convert to gcode
+			// var inlineSVG = $("#yoyo").html()
+			// console.log(inlineSVG)
+			// svg2gcode(inlineSVG, function(data){
+			// 	console.log(data)
+			// })		      
+
+		    }
+		}
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "svg-flatten",
+  "version": "0.0.1",
+  "description": "SVG flattener (adaptation of code by github.com/timo22345 to run in NodeJS)",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/jimjiminyjimjim/flattenjs-node"
+  },
+  "main": "lib/flatten.js",
+  "author": "Ricardo Baptista <ricardogermano85@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": "6.2.0"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "jsdom": "^9.2.0"
+  },
+  "devDependencies": {
+    "tape": "^4.5.1",
+    "svg-transform-parser": "ribaptista/svg-transform-parser#v0.0.3",
+    "async": "^2.0.0-rc.6",
+    "bower": "^1.7.9",
+    "browserify": "^13.0.1",
+    "grunt-mustache-render": "^1.9.2",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0"
+  }
+}

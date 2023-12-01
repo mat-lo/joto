@@ -1,0 +1,9 @@
+<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+  <rect transform="translate(30,30) rotate(40)" height="106" width="106" y="48.5" x="31.5" stroke-width="1.5" stroke="#000" fill="#8cd79f"/>
+  <rect transform="rotate(40) translate(30,30)" height="106" width="106" y="48.5" x="31.5" stroke-width="1.5" stroke="#000" fill="#B6C7EA"/>
+  <g transform="translate(100)">
+    <rect transform="skewX(30) rotate(40)" height="106" width="106" y="48.5" x="31.5" stroke-width="1.5" stroke="#000" fill="#8cd79f"/>
+    <rect transform="rotate(40) skewX(30)" height="106" width="106" y="48.5" x="31.5" stroke-width="1.5" stroke="#000" fill="#B6C7EA"/>
+  </g>
+<svg>
